@@ -20,7 +20,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (response.status !== 200) {
-      throw new Error("OpenAI API returned an error");
+      throw new Error("OpenAI API returned an error:" + JSON.stringify(response));
     }
 
     const json = await response.json();
