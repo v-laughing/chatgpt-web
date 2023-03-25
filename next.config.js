@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   basePath: "/chatbot", 
+  
   assetPrefix: '/chatbot/',
 
   webpack(config, { isServer, dev }) {
