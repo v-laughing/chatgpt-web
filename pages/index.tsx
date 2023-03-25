@@ -21,6 +21,7 @@ export default function Home() {
   const [messageIsStreaming, setMessageIsStreaming] = useState<boolean>(false);
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
   const [apiKey, setApiKey] = useState<string>("");
+  const [baseUrl, setBaseUrl] = useState<string>("");
   const [messageError, setMessageError] = useState<boolean>(false);
   const [modelError, setModelError] = useState<boolean>(false);
   const [isUsingEnv, setIsUsingEnv] = useState<boolean>(false);
@@ -55,6 +56,7 @@ export default function Home() {
         model: updatedConversation.model,
         messages: updatedConversation.messages,
         key: apiKey,
+        baseUrl: baseUrl,
         prompt: updatedConversation.prompt
       };
 
@@ -168,14 +170,15 @@ export default function Home() {
     }
   };
 
-  const fetchModels = async (key: string) => {
+  const fetchModels = async (key: string, baseUrl: string) => {
     const response = await fetch("/api/models", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        key
+        key,
+        baseUrl
       })
     });
 
@@ -203,6 +206,11 @@ export default function Home() {
   const handleApiKeyChange = (apiKey: string) => {
     setApiKey(apiKey);
     localStorage.setItem("apiKey", apiKey);
+  };
+
+  const handleBaseUrlChange = (baseUrl: string) => {
+    setBaseUrl(baseUrl);
+    localStorage.setItem("apiBaseUrl", baseUrl);
   };
 
   const handleEnvChange = (isUsingEnv: boolean) => {
@@ -359,27 +367,23 @@ export default function Home() {
   }, [selectedConversation]);
 
   useEffect(() => {
-    if (apiKey) {
-      fetchModels(apiKey);
-    }
-  }, [apiKey]);
-
-  useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (theme) {
       setLightMode(theme as "dark" | "light");
     }
 
-    const apiKey = localStorage.getItem("apiKey");
-    if (apiKey) {
+    const apiKey = localStorage.getItem("apiKey") || '';
+    const baseUrl = localStorage.getItem("apiBaseUrl") || '';
+    if (apiKey || baseUrl) {
       setApiKey(apiKey);
-      fetchModels(apiKey);
+      setBaseUrl(baseUrl);
+      fetchModels(apiKey, baseUrl);
     }
 
     const usingEnv = localStorage.getItem("isUsingEnv");
     if (usingEnv) {
       setIsUsingEnv(usingEnv === "true");
-      fetchModels("");
+      fetchModels("", baseUrl);
     }
 
     if (window.innerWidth < 640) {
@@ -414,6 +418,13 @@ export default function Home() {
       });
     }
   }, []);
+
+  useEffect(() => {
+    // console.log('1111111111111', apiKey, baseUrl)
+    if (apiKey || baseUrl) {
+      fetchModels(apiKey, baseUrl);
+    }
+  }, [apiKey, baseUrl]);
 
   return (
     <>
@@ -450,6 +461,7 @@ export default function Home() {
                   lightMode={lightMode}
                   selectedConversation={selectedConversation}
                   apiKey={apiKey}
+                  baseUrl={baseUrl}
                   folders={folders}
                   onToggleLightMode={handleLightMode}
                   onCreateFolder={handleCreateFolder}
@@ -461,6 +473,7 @@ export default function Home() {
                   onToggleSidebar={() => setShowSidebar(!showSidebar)}
                   onUpdateConversation={handleUpdateConversation}
                   onApiKeyChange={handleApiKeyChange}
+                  onBaseUrlChange={handleBaseUrlChange}
                   onClearConversations={handleClearConversations}
                   onExportConversations={handleExportData}
                   onImportConversations={handleImportConversations}

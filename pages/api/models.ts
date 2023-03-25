@@ -6,11 +6,13 @@ export const config = {
 
 const handler = async (req: Request): Promise<Response> => {
   try {
-    const { key } = (await req.json()) as {
+    const { key, baseUrl } = (await req.json()) as {
       key: string;
+      baseUrl: string
     };
+    // console.log('33333333333333', key, baseUrl)
 
-    const response = await fetch("https://api.openai.com/v1/models", {
+    const response = await fetch(`${baseUrl || 'https://api.openai.com' }/v1/models`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`

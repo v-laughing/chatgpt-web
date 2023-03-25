@@ -44,6 +44,7 @@ export interface ChatBody {
   model: OpenAIModel;
   messages: Message[];
   key: string;
+  baseUrl: string;
   prompt: string;
 }
 

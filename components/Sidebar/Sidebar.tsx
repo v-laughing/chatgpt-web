@@ -13,6 +13,7 @@ interface Props {
   selectedConversation: Conversation;
   apiKey: string;
   folders: ChatFolder[];
+  baseUrl: string;
   onCreateFolder: (name: string) => void;
   onDeleteFolder: (folderId: number) => void;
   onUpdateFolder: (folderId: number, name: string) => void;
@@ -23,12 +24,13 @@ interface Props {
   onToggleSidebar: () => void;
   onUpdateConversation: (conversation: Conversation, data: KeyValuePair) => void;
   onApiKeyChange: (apiKey: string) => void;
+  onBaseUrlChange: (baseUrl: string) => void;
   onClearConversations: () => void;
   onExportConversations: () => void;
   onImportConversations: (data: { conversations: Conversation[]; folders: ChatFolder[] }) => void;
 }
 
-export const Sidebar: FC<Props> = ({ loading, conversations, lightMode, selectedConversation, apiKey, folders, onCreateFolder, onDeleteFolder, onUpdateFolder, onNewConversation, onToggleLightMode, onSelectConversation, onDeleteConversation, onToggleSidebar, onUpdateConversation, onApiKeyChange, onClearConversations, onExportConversations, onImportConversations }) => {
+export const Sidebar: FC<Props> = ({ loading, conversations, lightMode, selectedConversation, apiKey, baseUrl, folders, onCreateFolder, onDeleteFolder, onUpdateFolder, onNewConversation, onToggleLightMode, onSelectConversation, onDeleteConversation, onToggleSidebar, onUpdateConversation, onApiKeyChange, onBaseUrlChange, onClearConversations, onExportConversations, onImportConversations }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredConversations, setFilteredConversations] = useState<Conversation[]>(conversations);
 
@@ -156,8 +158,10 @@ export const Sidebar: FC<Props> = ({ loading, conversations, lightMode, selected
       <SidebarSettings
         lightMode={lightMode}
         apiKey={apiKey}
+        baseUrl={baseUrl}
         onToggleLightMode={onToggleLightMode}
         onApiKeyChange={onApiKeyChange}
+        onBaseUrlChange={onBaseUrlChange}
         onClearConversations={onClearConversations}
         onExportConversations={onExportConversations}
         onImportConversations={onImportConversations}
