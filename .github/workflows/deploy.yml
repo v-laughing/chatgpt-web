@@ -13,7 +13,7 @@ jobs:
         node-version: 16
 
     - name: Build
-      run: npm install && npm run build
+      run: npm install && npm run build && npm run export && touch ./out/.nojekyll
 
     - name: deploy
       uses: JamesIves/github-pages-deploy-action@v4
@@ -21,4 +21,4 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
         repository-name: v-laughing/chatbot
         branch: gh-pages
-        folder: docs/.vuepress/dist
+        folder: out
