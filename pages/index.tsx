@@ -61,7 +61,7 @@ export default function Home() {
       };
 
       const controller = new AbortController();
-      const response = await fetch("/chatbot/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -171,7 +171,7 @@ export default function Home() {
   };
 
   const fetchModels = async (key: string, baseUrl: string) => {
-    const response = await fetch("/chatbot/api/models", {
+    const response = await fetch("/api/models", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
